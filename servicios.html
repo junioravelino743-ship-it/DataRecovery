@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Servicios — Nombre del Proyecto</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html"><img src="imagenes/logo.png" alt="" width="28" height="28"><span>Data Recovery</span></a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="menu">☰</button>
+      <nav id="menu" class="menu" aria-label="Principal">
+        <ul>
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="servicios.html" aria-current="page">Servicios</a></li>
+          <li><a href="acerca.html">Acerca</a></li>
+          <li><a href="contacto.html">Contacto</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <section class="section">
+      <div class="container">
+        <h1>Servicios</h1>
+        <div class="grid-3">
+          <article class="card"><h3>Diseño y Maquetado</h3><p>Prototipos y UI responsiva.</p></article>
+          <article class="card"><h3>Optimización</h3><p>SEO y seguridad técnica.</p></article>
+          <article class="card"><h3>Integraciones</h3><p>Formularios, mapas y hosting.</p></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div><strong>Nombre del Proyecto</strong><p>© <span id="year"></span></p></div>
+      <nav aria-label="Secundario">
+        <a href="index.html">Inicio</a>
+        <a href="servicios.html">Servicios</a>
+        <a href="acerca.html">Acerca</a>
+        <a href="contacto.html">Contacto</a>
+      </nav>
+    </div>
+  </footer>
+  <script>document.getElementById('year').textContent=new Date().getFullYear();</script>
+</body>
+</html>
