@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Atención y Soporte Personalizado — Data Recovery</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container nav">
+    <a class="brand" href="index.html">
+      <img src="imagenes/logo.png" alt="" width="28" height="28">
+      <span>Data Recovery</span>
+    </a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="menu">☰</button>
+    <nav id="menu" class="menu" aria-label="Principal">
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="servicios.html" aria-current="page">Servicios</a></li>
+        <li><a href="acerca.html">Acerca</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="contenido">
+  <section class="section">
+    <div class="container">
+      <h1>Atención y Soporte Personalizado</h1>
+      <p class="lead" style="color:#1f2937;max-width:70ch">
+        Desde el diagnóstico gratuito hasta la entrega final, te acompañamos en cada paso con informes claros,
+        trato profesional y seguimiento cercano. Planes mensuales con SLAs, horarios extendidos y canal de atención
+        dedicado según tus necesidades.
+      </p>
+
+      <div class="cards" style="margin-top:16px;">
+        <article class="card">
+          <h3>Costos orientativos</h3>
+          <ul class="list">
+            <li>Plan Básico: <strong>$450–$650 MXN/mes</strong> (hasta 3 equipos)</li>
+            <li>Plan Prioridad: <strong>$900–$1,300 MXN/mes</strong> (SLAs más estrictos, atención extendida)</li>
+            <li>On-site (opcional): <strong>desde $600 MXN/visita</strong></li>
+          </ul>
+          <p class="help">Los montos varían por número de equipos, horario de atención y tiempo de respuesta requerido.</p>
+        </article>
+      </div>
+
+      <h3 style="margin-top:20px;">Solicita tu presupuesto</h3>
+      <form class="form" id="form-presu">
+        <div class="grid-2">
+          <label><span>Nombre</span><input name="nombre" required></label>
+          <label><span>Correo</span><input name="correo" type="email" required></label>
+        </div>
+
+        <div class="grid-2">
+          <label>
+            <span>Plan</span>
+            <select name="plan" required>
+              <option value="basico">Básico</option>
+              <option value="prioridad">Prioridad</option>
+            </select>
+          </label>
+          <label>
+            <span>Número de equipos</span>
+            <select name="equipos" required>
+              <option value="1a3">1–3</option>
+              <option value="4a10">4–10</option>
+              <option value="11a25">11–25</option>
+              <option value="26mas">26 o más</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="grid-2">
+          <label>
+            <span>Horario de atención</span>
+            <select name="horario" required>
+              <option value="oficina">Horario de oficina</option>
+              <option value="extendido">Extendido (hasta 21:00)</option>
+            </select>
+          </label>
+          <label>
+            <span>SLA (tiempo de respuesta)</span>
+            <select name="sla" required>
+              <option value="8h">8 horas</option>
+              <option value="4h">4 horas</option>
+              <option value="2h">2 horas</option>
+            </select>
+          </label>
+        </div>
+
+        <label>
+          <span>Comentarios</span>
+          <textarea name="detalle" rows="4" placeholder="Canales preferidos, on-site, fines de semana…"></textarea>
+        </label>
+
+        <p class="help" id="estimado-ayuda">Estimado: —</p>
+        <button class="btn primary" type="submit">Solicitar presupuesto</button>
+      </form>
+    </div>
+    <div class="btn-center" style="margin-top:22px;">
+          <a href="servicios.html" class="btn diagnostico">volver</a>
+        </div>
+  </section>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div><strong>Data Recovery</strong><p>© <span id="year"></span></p></div>
+    <nav aria-label="Secundario">
+      <a href="index.html">Inicio</a>
+      <a href="servicios.html" aria-current="page">Servicios</a>
+      <a href="acerca.html">Acerca</a>
+      <a href="contacto.html">Contacto</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  // Menú móvil
+  const toggle=document.querySelector('.nav-toggle'), menu=document.getElementById('menu');
+  toggle?.addEventListener('click',()=>{
+    const e=toggle.getAttribute('aria-expanded')==='true';
+    toggle.setAttribute('aria-expanded',String(!e));
+    menu.classList.toggle('open');
+  });
+  document.getElementById('year').textContent=new Date().getFullYear();
+
+  // ===== Estimador Soporte Mensual =====
+  const form=document.getElementById('form-presu');
+  const ayuda=document.getElementById('estimado-ayuda');
+
+  // Base por plan (mensual)
+  const basePlan = {
+    basico:    [450, 650],
+    prioridad: [900, 1300]
+  };
+
+  // Factor por número de equipos
+  const factorEquipos = {
+    "1a3":   1.00,
+    "4a10":  1.25,
+    "11a25": 1.55,
+    "26mas": 1.95
+  };
+
+  // Factor por horario
+  const factorHorario = {
+    oficina:   1.00,
+    extendido: 1.20
+  };
+
+  // Factor por SLA (tiempo de respuesta)
+  const factorSLA = {
+    "8h": 1.00,
+    "4h": 1.15,
+    "2h": 1.35
+  };
+
+  function calc(){
+    const f=new FormData(form);
+    const plan=f.get('plan'), eq=f.get('equipos'), ho=f.get('horario'), sl=f.get('sla');
+
+    if(basePlan[plan] && factorEquipos[eq] && factorHorario[ho] && factorSLA[sl]){
+      const [minB, maxB] = basePlan[plan];
+      const mult = factorEquipos[eq] * factorHorario[ho] * factorSLA[sl];
+
+      const min = Math.round(minB * mult);
+      const max = Math.round(maxB * mult);
+
+      ayuda.textContent = `Estimado mensual: $${min.toLocaleString()}–$${max.toLocaleString()} MXN (orientativo).`;
+    }
+  }
+
+  form?.addEventListener('change', calc);
+  form?.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    alert('¡Gracias! Te enviaremos tu presupuesto a tu correo.');
+    form.reset(); ayuda.textContent='Estimado: —';
+  });
+</script>
+</body>
+</html>

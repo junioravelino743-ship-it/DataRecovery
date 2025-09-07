@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Recuperación de Datos — Data Recovery</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container nav">
+    <a class="brand" href="index.html"><img src="imagenes/logo.png" alt="" width="28" height="28"><span>Data Recovery</span></a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="menu">☰</button>
+    <nav id="menu" class="menu" aria-label="Principal">
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="servicios.html" aria-current="page">Servicios</a></li>
+        <li><a href="acerca.html">Acerca</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="contenido">
+  <section class="section">
+    <div class="container">
+      <h1>Recuperación de Datos</h1>
+      <p class="lead" style="color:#1f2937;max-width:70ch">
+        ¿Perdiste información en tu computadora, disco duro o memoria USB? Recuperamos tus archivos de forma segura y confiable, devolviéndote lo que pensabas perdido.
+      </p>
+
+      <div class="cards" style="margin-top:16px;">
+        <article class="card">
+          <h3>Costos orientativos</h3>
+          <ul class="list">
+            <li>Diagnóstico: <strong>$0</strong> (gratuito)</li>
+            <li>Casos lógicos (borrado/formato): <strong>$1,200–$2,500 MXN</strong></li>
+            <li>Casos físicos (fallo de hardware): <strong>$3,500–$9,000 MXN</strong></li>
+          </ul>
+          <p class="help">Los precios pueden variar por capacidad, tipo de daño y urgencia.</p>
+        </article>
+      </div>
+
+      <h3 style="margin-top:20px;">Solicita tu presupuesto</h3>
+      <form class="form" id="form-presu">
+        <div class="grid-2">
+          <label><span>Nombre</span><input name="nombre" required></label>
+          <label><span>Correo</span><input name="correo" type="email" required></label>
+        </div>
+        <div class="grid-2">
+          <label>
+            <span>Tipo de dispositivo</span>
+            <select name="tipo" required>
+              <option value="logico">Borrado/Formato (daño lógico)</option>
+              <option value="fisico">Fallo de hardware (daño físico)</option>
+            </select>
+          </label>
+          <label>
+            <span>Capacidad aprox.</span>
+            <select name="capacidad" required>
+              <option value="menor500">≤500 GB</option>
+              <option value="500a2000">500 GB–2 TB</option>
+              <option value="mayor2000">≥2 TB</option>
+            </select>
+          </label>
+        </div>
+        <label>
+          <span>Descripción del problema</span>
+          <textarea name="detalle" rows="4" placeholder="Qué pasó, qué intentaste, hace cuánto…"></textarea>
+        </label>
+        <p class="help" id="estimado-ayuda">Estimado: —</p>
+        <button class="btn primary" type="submit">Solicitar presupuesto</button>
+      </form>
+    </div>
+    <div class="btn-center" style="margin-top:22px;">
+          <a href="servicios.html" class="btn diagnostico">volver</a>
+        </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div><strong>Data Recovery</strong><p>© <span id="year"></span></p></div>
+    <nav aria-label="Secundario">
+      <a href="index.html">Inicio</a>
+      <a href="servicios.html" aria-current="page">Servicios</a>
+      <a href="acerca.html">Acerca</a>
+      <a href="contacto.html">Contacto</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  // Menú móvil
+  const toggle=document.querySelector('.nav-toggle'), menu=document.getElementById('menu');
+  toggle?.addEventListener('click',()=>{const e=toggle.getAttribute('aria-expanded')==='true';toggle.setAttribute('aria-expanded',String(!e));menu.classList.toggle('open');});
+  document.getElementById('year').textContent=new Date().getFullYear();
+
+  // Estimador simple (cliente)
+  const form=document.getElementById('form-presu');
+  const ayuda=document.getElementById('estimado-ayuda');
+  const rangos={
+    logico:{menor500:[1200,1800], "500a2000":[1500,2200], mayor2000:[1800,2500]},
+    fisico:{menor500:[3500,6000], "500a2000":[4500,7500], mayor2000:[6000,9000]}
+  };
+  function calc(){
+    const f=new FormData(form);
+    const tipo=f.get('tipo'), cap=f.get('capacidad');
+    if(rangos[tipo] && rangos[tipo][cap]){
+      const [min,max]=rangos[tipo][cap];
+      ayuda.textContent=`Estimado: $${min.toLocaleString()}–$${max.toLocaleString()} MXN (orientativo)`;
+    }
+  }
+  form?.addEventListener('change',calc);
+  form?.addEventListener('submit', (e)=> {
+    e.preventDefault();
+    alert('¡Gracias! Te enviaremos tu presupuesto a tu correo.');
+    form.reset(); ayuda.textContent='Estimado: —';
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Copias de Seguridad en la Nube — Data Recovery</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container nav">
+    <a class="brand" href="index.html">
+      <img src="imagenes/logo.png" alt="" width="28" height="28">
+      <span>Data Recovery</span>
+    </a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="menu">☰</button>
+    <nav id="menu" class="menu" aria-label="Principal">
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="servicios.html" aria-current="page">Servicios</a></li>
+        <li><a href="acerca.html">Acerca</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="contenido">
+  <section class="section">
+    <div class="container">
+      <h1>Copias de Seguridad en la Nube</h1>
+      <p class="lead" style="color:#1f2937;max-width:70ch">
+        Protege tu información con respaldos automáticos en la nube. Configuramos planes seguros para que accedas a tus archivos
+        cuando los necesites y evites volver a pasar por una pérdida de datos.
+      </p>
+
+      <div class="cards" style="margin-top:16px;">
+        <article class="card">
+          <h3>Costos orientativos</h3>
+          <ul class="list">
+            <li>Diagnóstico y propuesta: <strong>$0</strong> (gratuito)</li>
+            <li>Implementación inicial (setup): <strong>$1,200–$2,500 MXN</strong></li>
+            <li>Cuota mensual del proveedor: <strong>desde $120–$400 MXN</strong> (según almacenamiento)</li>
+            <li>Capacitación básica al usuario: incluida en el setup</li>
+          </ul>
+          <p class="help">Los costos varían según volumen de datos, número de equipos y proveedor elegido.</p>
+        </article>
+      </div>
+
+      <h3 style="margin-top:20px;">Solicita tu presupuesto</h3>
+      <form class="form" id="form-presu">
+        <div class="grid-2">
+          <label><span>Nombre</span><input name="nombre" required></label>
+          <label><span>Correo</span><input name="correo" type="email" required></label>
+        </div>
+
+        <div class="grid-2">
+          <label>
+            <span>Volumen de datos</span>
+            <select name="volumen" required>
+              <option value="menos100">Menos de 100 GB</option>
+              <option value="100a500">100–500 GB</option>
+              <option value="500a2000">500 GB–2 TB</option>
+              <option value="mas2000">Más de 2 TB</option>
+            </select>
+          </label>
+          <label>
+            <span>Número de equipos</span>
+            <select name="equipos" required>
+              <option value="1">1 equipo</option>
+              <option value="2a5">2–5 equipos</option>
+              <option value="6a10">6–10 equipos</option>
+              <option value="mas10">Más de 10 equipos</option>
+            </select>
+          </label>
+        </div>
+
+        <label>
+          <span>Proveedor preferido (opcional)</span>
+          <input name="proveedor" placeholder="Google Drive, OneDrive, Dropbox, iCloud…">
+        </label>
+
+        <label>
+          <span>Comentarios</span>
+          <textarea name="detalle" rows="4" placeholder="Requisitos especiales, horarios, políticas internas…"></textarea>
+        </label>
+
+        <p class="help" id="estimado-ayuda">Estimado: —</p>
+        <button class="btn primary" type="submit">Solicitar presupuesto</button>
+      </form>
+    </div>
+    <div class="btn-center" style="margin-top:22px;">
+          <a href="servicios.html" class="btn diagnostico">volver</a>
+        </div>
+  </section>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div><strong>Data Recovery</strong><p>© <span id="year"></span></p></div>
+    <nav aria-label="Secundario">
+      <a href="index.html">Inicio</a>
+      <a href="servicios.html" aria-current="page">Servicios</a>
+      <a href="acerca.html">Acerca</a>
+      <a href="contacto.html">Contacto</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  // Menú móvil
+  const toggle=document.querySelector('.nav-toggle'),
+        menu=document.getElementById('menu');
+  toggle?.addEventListener('click',()=>{
+    const e=toggle.getAttribute('aria-expanded')==='true';
+    toggle.setAttribute('aria-expanded',String(!e));
+    menu.classList.toggle('open');
+  });
+  document.getElementById('year').textContent=new Date().getFullYear();
+
+  // Estimador simple (cliente)
+  const form=document.getElementById('form-presu');
+  const ayuda=document.getElementById('estimado-ayuda');
+
+  // Rangos orientativos: setup según volumen + ajuste por número de equipos
+  const setupVolumen = {
+    menos100:  [1200, 1600],
+    "100a500": [1500, 2000],
+    "500a2000":[1800, 2500],
+    mas2000:   [2200, 3200]
+  };
+  const factorEquipos = {
+    "1":     1.00,
+    "2a5":   1.15,
+    "6a10":  1.30,
+    "mas10": 1.50
+  };
+
+  function calc(){
+    const f=new FormData(form);
+    const v=f.get('volumen'), e=f.get('equipos');
+    if(setupVolumen[v] && factorEquipos[e]){
+      const [min,max]=setupVolumen[v];
+      const factor=factorEquipos[e];
+      const minAdj=Math.round(min*factor), maxAdj=Math.round(max*factor);
+      ayuda.textContent=`Estimado setup: $${minAdj.toLocaleString()}–$${maxAdj.toLocaleString()} MXN (orientativo) + mensualidad del proveedor.`;
+    }
+  }
+
+  form?.addEventListener('change',calc);
+  form?.addEventListener('submit',(ev)=>{
+    ev.preventDefault();
+    alert('¡Gracias! Te enviaremos tu presupuesto a tu correo.');
+    form.reset(); ayuda.textContent='Estimado: —';
+  });
+</script>
+</body>
+</html>

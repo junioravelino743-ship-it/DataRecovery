@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sistemas de Respaldo en Dispositivos — Data Recovery</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="container nav">
+    <a class="brand" href="index.html">
+      <img src="imagenes/logo.png" alt="" width="28" height="28">
+      <span>Data Recovery</span>
+    </a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="menu">☰</button>
+    <nav id="menu" class="menu" aria-label="Principal">
+      <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="servicios.html" aria-current="page">Servicios</a></li>
+        <li><a href="acerca.html">Acerca</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="contenido">
+  <section class="section">
+    <div class="container">
+      <h1>Sistemas de Respaldo en Dispositivos</h1>
+      <p class="lead" style="color:#1f2937;max-width:70ch">
+        Instalamos soluciones de respaldo en discos externos y servidores NAS, para que siempre tengas una copia segura de tu información más importante.
+        Configuramos programación automática, versiones de archivos y alertas, con acceso seguro en tu red local.
+      </p>
+
+      <div class="cards" style="margin-top:16px;">
+        <article class="card">
+          <h3>Costos orientativos</h3>
+          <ul class="list">
+            <li>Diagnóstico y propuesta: <strong>$0</strong> (gratuito)</li>
+            <li>Setup con <em>disco externo</em>: <strong>$1,500–$2,500 MXN</strong> (no incluye hardware)</li>
+            <li>Setup con <em>NAS</em> (red local): <strong>$3,000–$6,000 MXN</strong> (no incluye hardware)</li>
+            <li>Mantenimiento mensual (opcional): <strong>$350–$1,200 MXN</strong> según usuarios/alertas</li>
+          </ul>
+          <p class="help">El costo depende del número de equipos, volumen de datos y políticas de versiones. El hardware (discos/NAS) se cotiza por separado.</p>
+        </article>
+      </div>
+
+      <h3 style="margin-top:20px;">Solicita tu presupuesto</h3>
+      <form class="form" id="form-presu">
+        <div class="grid-2">
+          <label><span>Nombre</span><input name="nombre" required></label>
+          <label><span>Correo</span><input name="correo" type="email" required></label>
+        </div>
+
+        <div class="grid-2">
+          <label>
+            <span>Tipo de solución</span>
+            <select name="tipo" required>
+              <option value="disco">Disco externo (USB)</option>
+              <option value="nas">Servidor NAS (red local)</option>
+            </select>
+          </label>
+          <label>
+            <span>Número de usuarios/equipos</span>
+            <select name="usuarios" required>
+              <option value="1a3">1–3</option>
+              <option value="4a10">4–10</option>
+              <option value="11a25">11–25</option>
+              <option value="26mas">26 o más</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="grid-2">
+          <label>
+            <span>Volumen de datos</span>
+            <select name="volumen" required>
+              <option value="menos500">Menos de 500 GB</option>
+              <option value="500a2000">500 GB–2 TB</option>
+              <option value="mas2000">Más de 2 TB</option>
+            </select>
+          </label>
+          <label>
+            <span>Mantenimiento mensual</span>
+            <select name="manto" required>
+              <option value="no">Sin mantenimiento</option>
+              <option value="basico">Básico (monitoreo y respaldo)</option>
+              <option value="avanzado">Avanzado (alertas + soporte)</option>
+            </select>
+          </label>
+        </div>
+
+        <label>
+          <span>Comentarios</span>
+          <textarea name="detalle" rows="4" placeholder="Horarios, políticas de versiones, cifrado, acceso remoto…"></textarea>
+        </label>
+
+        <p class="help" id="estimado-ayuda">Estimado: —</p>
+        <button class="btn primary" type="submit">Solicitar presupuesto</button>
+      </form>
+    </div>
+    <div class="btn-center" style="margin-top:22px;">
+          <a href="servicios.html" class="btn diagnostico">volver</a>
+        </div>
+  </section>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div><strong>Data Recovery</strong><p>© <span id="year"></span></p></div>
+    <nav aria-label="Secundario">
+      <a href="index.html">Inicio</a>
+      <a href="servicios.html" aria-current="page">Servicios</a>
+      <a href="acerca.html">Acerca</a>
+      <a href="contacto.html">Contacto</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  // Menú móvil
+  const toggle=document.querySelector('.nav-toggle'), menu=document.getElementById('menu');
+  toggle?.addEventListener('click',()=>{
+    const e=toggle.getAttribute('aria-expanded')==='true';
+    toggle.setAttribute('aria-expanded',String(!e));
+    menu.classList.toggle('open');
+  });
+  document.getElementById('year').textContent=new Date().getFullYear();
+
+  // ===== Estimador (setup + mantenimiento) =====
+  const form=document.getElementById('form-presu');
+  const ayuda=document.getElementById('estimado-ayuda');
+
+  // Setup base por tipo de solución
+  const setupBase = {
+    disco: [1500, 2500],
+    nas:   [3000, 6000]
+  };
+
+  // Multiplicadores por número de usuarios/equipos
+  const factorUsuarios = {
+    "1a3":   1.00,
+    "4a10":  1.20,
+    "11a25": 1.40,
+    "26mas": 1.70
+  };
+
+  // Ajuste por volumen (afecta tiempos de configuración y validación)
+  const factorVolumen = {
+    menos500:  1.00,
+    "500a2000":1.15,
+    mas2000:   1.30
+  };
+
+  // Mantenimiento mensual (opcional)
+  const mantoMensual = {
+    no:       [0, 0],
+    basico:   [350, 600],
+    avanzado: [800, 1200]
+  };
+
+  function calc(){
+    const f=new FormData(form);
+    const tipo   = f.get('tipo');
+    const usuarios = f.get('usuarios');
+    const volumen  = f.get('volumen');
+    const manto    = f.get('manto');
+
+    if(setupBase[tipo] && factorUsuarios[usuarios] && factorVolumen[volumen] && mantoMensual[manto]){
+      const [minBase, maxBase] = setupBase[tipo];
+      const fu = factorUsuarios[usuarios], fv = factorVolumen[volumen];
+      const [mMin, mMax] = mantoMensual[manto];
+
+      const minSetup = Math.round(minBase * fu * fv);
+      const maxSetup = Math.round(maxBase * fu * fv);
+
+      let texto = `Setup estimado: $${minSetup.toLocaleString()}–$${maxSetup.toLocaleString()} MXN`;
+      if(mMax > 0){
+        texto += ` + mantenimiento: $${mMin.toLocaleString()}–$${mMax.toLocaleString()} MXN/mes.`;
+      } else {
+        texto += `.`;
+      }
+      texto += " (Orientativo; no incluye hardware).";
+
+      ayuda.textContent = texto;
+    }
+  }
+
+  form?.addEventListener('change', calc);
+  form?.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    alert('¡Gracias! Te enviaremos tu presupuesto a tu correo.');
+    form.reset(); ayuda.textContent='Estimado: —';
+  });
+</script>
+</body>
+</html>
